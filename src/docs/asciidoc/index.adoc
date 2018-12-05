@@ -1,0 +1,106 @@
+= Loyalty Scheme Point Gambling API
+
+[[overview]]
+== Overview
+
+An API that gives loyalty scheme members the ability to gamble with their points on a simple dice roll.
+
+At present a single *double-or-nothing* game type is supported but more may be added in time. Use the members resource
+to fetch the point balance associated with a member's card and then the games resource to play games.
+
+This API will be used by an SPA or other types of applications.
+
+=== Status
+
+This API is not complete. The following needs to be addressed:
+
+* Authentication and authorization.
+* Potential rate limiting (once per year) on games e.g. the *double-or-nothing* game poses a risk to the loyalty scheme.
+
+=== The Double-Or-Nothing Game
+
+With the *double-or-nothing* game is a game of chance based on a simple dice roll. if a member rolls the dice and gets an
+even number they double their points and if they roll an odd number they don't win any points.
+
+[[overview-http-verbs]]
+== HTTP verbs
+|=====
+|Verb | Usage
+
+| `GET`
+| To retrieve a resource
+
+|`POST`
+| To create a new resource
+
+|`PUT`
+| To update an existing resource
+
+| `DELETE`
+| To delete an existing resource
+|=====
+
+[[overview-http-status-codes]]
+== HTTP status codes
+|=====
+| Status code | Usage
+
+| `200 OK`
+| Successful HTTP requests. In `GET` the response will contain an entity corresponding to teh requested resource. In `POST` the response will contain an entity describing or containing the result of an action.
+
+| `401 Unauthorized`
+| Client error HTTP status code. The HTTP 401 Unauthorized client error status response code indicates that the request
+has not been applied because it lacks valid authentication credentials for the target resource. Loyalty scheme members
+are only permitted to perform operations on resources using card numbers that they own and an unauthorized response
+will be returned if an attempt is made to use another members card.
+
+| `40x Bad Request`
+| The server cannot process the request due to something that is perceived to be a client error.
+
+| `404 Not found`
+| The requested resource cannot be found.
+
+| `50x Server Error`
+| The server cannot process the request due to something wrong at the server.
+|=====
+
+
+== Members resource
+
+[[get-member-details]]
+
+A `GET` request retrieving the member details by ID.
+
+.request
+include::{snippets}/get-member-details/http-request.adoc[]
+
+include::{snippets}/get-member-details/curl-request.adoc[]
+
+include::{snippets}/get-member-details/httpie-request.adoc[]
+
+.response
+include::{snippets}/get-member-details/http-response.adoc[]
+
+== Games resource
+
+A `POST` request to the games resource followed by the game name as path variable.
+
+At present the only option in terms of the game name is the double-or-nothing dice roll game. More options
+may be added in time.
+
+Post a play request as payload with the card number specified. A play result response will be sent in response
+with the dice roll result, the game result (win or lose), the amount of points won, the users point balance
+before the game as played and the users point balance after the game was played.
+
+[[post-double-or-nothing-game-play-request]]
+
+.request
+include::{snippets}/post-double-or-nothing-game-play-request/http-request.adoc[]
+
+include::{snippets}/post-double-or-nothing-game-play-request/curl-request.adoc[]
+
+include::{snippets}/post-double-or-nothing-game-play-request/httpie-request.adoc[]
+
+.response
+include::{snippets}/post-double-or-nothing-game-play-request/http-response.adoc[]
+
