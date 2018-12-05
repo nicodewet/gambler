@@ -32,7 +32,7 @@ else the points are lost.
 layer need to implement become our specification for an effective adapter (which will initially be a stub in the absence
 of being provided with back-end system API documentation or a running copy of the said back-end system). Our external 
 API (facing the SPA) which we'll call out entrypoint layer will be insulated from change at lower layers.
-* We will park *some* authentication and authorization concerns but not park them. For example, while we may not know
+* We will park *some* authentication and authorization concerns but not park them entirely. For example, while we may not know
 the specific technologies that may be used by the client, or available for use, we can still protect the back-end
 APIs from abuse, or at least write interfaces to all stubs at critical points.
 * We'll implement the API first leading to a service-oriented front end architecture (SOFEA) which is useful from 
