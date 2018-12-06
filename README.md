@@ -14,7 +14,7 @@ $ ./gradlew bootJar
 
 See build/asciidoc/html5/index.html for the generated, accurate API documentation.
 
-If you want to play with the API, run up the with the bootRun command and use curl to exercise the API (see
+If you want to play with the API, run up the app with the bootRun command and use curl to exercise the API (see
 the generated documentation for examples).
 
 ## Requirements
@@ -24,14 +24,14 @@ the generated documentation for examples).
 else the points are lost.
 * Game would need to integrate with the loyalty scheme back-end systems using their JSON APIs.
 * Must design some APIs that could do the job.
-* Do just enough to cover the needs of the SPA
+* Do just enough to cover the needs of the SPA.
 
 ## Decisions
 
 * Follow Robert C. Martin's clean architecture (layers) in particular because the interface(s) that the dataprovider 
 layer need to implement become our specification for an effective adapter (which will initially be a stub in the absence
 of being provided with back-end system API documentation or a running copy of the said back-end system). Our external 
-API (facing the SPA) which we'll call out entrypoint layer will be insulated from change at lower layers.
+API (facing the SPA) which we'll call our entrypoint layer will be insulated from change at lower layers.
 * We will park *some* authentication and authorization concerns but not park them entirely. For example, while we may not know
 the specific technologies that may be used by the client, or available for use, we can still protect the back-end
 APIs from abuse, or at least write interfaces to all stubs at critical points.
@@ -71,7 +71,7 @@ In summary the following were a given to me or implicit in what I did:
 * Following the [Google JSON Style Guide](https://google.github.io/styleguide/jsoncstyleguide.xml)
 * Thinking about statelessness
 * Thinking about security concerns 
-* Thinking were to place core business logic - and deciding that the core of the app would be server-side 
+* Thinking where to place core business logic - and deciding that the core of the app would be server-side 
 * I resisted the temptation to invent validation logic at all layers where there was significant uncertainty (e.g. the 
 formatting of a valid loyalty scheme card number)
 
@@ -85,10 +85,10 @@ I had these thoughts and questions in the back of my mind to start with:
 
 * REST and the Richardson Maturity Model
 * A stateless back-end as seems to be the standard nowadays with OAuth 2 / OpenID Connect
-* Park the details on how authentication and authorization will work to begin with but not the points at which is should 
-happen
+* Park the details on how authentication and authorization will work to begin with but not at the points at which it 
+should happen (e.g. add TODOs in code if need be)
 * Do not expose or proxy the loyalty scheme back-end APIs to the SPA layer
-* The need to an *adaptable* adapter (dataprovider layer) used by the core layer is apparent.
+* The need to build an *adaptable* adapter (dataprovider layer) used by the core layer is apparent.
 * How to prevent *run-away* gambling, that is a coding error in the front-end (SPA) causing unwanted gambling events
 in the back-end.
 * Is this legal?
@@ -118,8 +118,8 @@ unknowns in terms of requirements, a simpler programming model may trump perform
 memory the app may require.
 
 All of the above said, In terms of the actual backend implementation, I would talk to the client about their roadmaps 
-and  internal preferences before choosing a language. Changes are high that I would choose the client's primary language 
-and  frameworks if they decision was left to me. If the client had plans to use a language that is not heavily used in 
+and internal preferences before choosing a language. Chances are high that I would choose the client's primary language 
+and frameworks if they decision was left to me. If the client had plans to use a language that is not heavily used in 
 say Wellington or New Zealand then I may urge them to reconsider.
 
 I have no strong feelings about the front-end language and framework(s) but would hope for one that has great testing
@@ -146,12 +146,12 @@ rapid prototyping is called for.
 Yes I did use Spring Boot, Spring Web MVC and much more. 
 
 No because no framework code is used at the core layer which is a central theme in Robert C. Martin's clean architecture
-and something I have had to concentrate on after developing at high pace for too long. I feel that frameworks dumb down 
+and something I have had to concentrate on after developing at a high pace for too long. I feel that frameworks dumb down 
 developers (software engineers) and focusing on unit testing a core framework free layer is very important. It is easy to 
 let frameworks "take over" with domain logic littered across a codebase which may make maintenance development difficult 
-and expensive. This is also what Pivotal teaches developers on the Spring Core course. Moreover developing unit testable
-code takes thought, skill and effort and I think its a worthy investment (but it is equally important to know when not
-to focus on this).
+and expensive. This, "namely our framework does not come first", is also what Pivotal teaches developers on the Spring 
+Core course. Moreover developing unit testable code takes thought, skill and effort and I think its a worthy investment 
+(but it is equally important to know when *not* to focus on this).
 
 The why covered in the long answer, but in short some key reasons why is because of the excellent teaching and tutorials 
 provided by Pivotal, excellent test infrastructure support and it leads well onto using containers while still being 
@@ -207,7 +207,7 @@ developers should be able to user mature, well known and understood tooling (e.g
 - [reference blog](https://aws.amazon.com/blogs/compute/set-up-a-continuous-delivery-pipeline-for-containers-using-aws-codepipeline-and-amazon-ecs/)
 - [reference tut](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-cd-pipeline.html)
 
-I terms of the managed part, ideally there would be a squad that is responsible for the pipeline and no silo-ing. That 
+In terms of the managed part, ideally there would be a squad that is responsible for the pipeline and no silo-ing. That 
 is, each squad member would be able to stand in for each other on the AWS front, Kotlin front or front-end front.
 
 Also, I would gradually enhance the capabilities of the pipeline and park e.g. blue/green deployment concerns.
