@@ -1,4 +1,8 @@
-# Loyalty Scheme Gambler
+# Member Point Gambler
+
+A RESTful API that gives members or subscribers the ability to gamble with their credits or points on a simple dice roll. 
+Credits or points are used in many companies as a token for some kind of domain specific value (e.g. a WiFi hotspot 
+company that gives subscribers the ability to buy credits).
 
 To run the app:
 
@@ -6,7 +10,7 @@ To run the app:
 $ ./gradlew bootRun
 ```
 
-The documentation will be generated from integration test cases when you execute:
+The RESTful API documentation will be generated from integration test cases when you execute:
 
 ```
 $ ./gradlew bootJar
@@ -17,14 +21,18 @@ See build/asciidoc/html5/index.html for the generated, accurate API documentatio
 If you want to play with the API, run up the app with the bootRun command and use curl to exercise the API (see
 the generated documentation for examples).
 
-## Requirements
+## Requirements and Context
 
 * Client requires a simple marketing SPA where members can gamble their points on a dice roll.
 * The type of game is variable, a game could be all-or-nothing e.g. if they roll an even number they double their points,
 else the points are lost.
-* Game would need to integrate with the loyalty scheme back-end systems using their JSON APIs.
+* Game would need to integrate with the company member / credit back-end systems using their JSON APIs (these are not 
+available at the time of design & development).
 * Must design some APIs that could do the job.
 * Do just enough to cover the needs of the SPA.
+* Members must supply their card numbers to indentify themselves (with some businesses this would be say an email 
+address).
+* Build the SPA if time allows.
 
 ## Decisions
 
@@ -32,9 +40,9 @@ else the points are lost.
 layer need to implement become our specification for an effective adapter (which will initially be a stub in the absence
 of being provided with back-end system API documentation or a running copy of the said back-end system). Our external 
 API (facing the SPA) which we'll call our entrypoint layer will be insulated from change at lower layers.
-* We will park *some* authentication and authorization concerns but not park them entirely. For example, while we may not know
-the specific technologies that may be used by the client, or available for use, we can still protect the back-end
-APIs from abuse, or at least write interfaces to all stubs at critical points.
+* We will park *some* authentication and authorization concerns but not park them entirely. For example, while we may 
+not know the specific technologies that may be used by the client, or available for use, we can still protect the 
+back-end APIs from abuse, or at least write interfaces to all stubs at critical points.
 * We'll implement the API first leading to a service-oriented front end architecture (SOFEA) which is useful from 
 a testing perspective irrespective of whether the front-end is an SPA or not.
 
@@ -43,8 +51,8 @@ a testing perspective irrespective of whether the front-end is an SPA or not.
 ### Short Answer
 
 I did not decide upon my API design as such, it was an incremental process over a number of days and I have 
-a number of open questions and assumptions. For example I only just noticed that it appears I have two loyalty 
-cards numbers from a particular scheme and am continuing to assume that from the loyalty scheme perspective these 
+a number of open questions and assumptions. For example I only just noticed that it appears I have two 
+cards numbers from a particular company and am continuing to assume that from the company perspective these 
 cannot be correlated to the same web login identifier (e.g. email address).
 
 The design is likely to be incomplete because for example I have parked adding authorization and made business 
@@ -73,7 +81,7 @@ In summary the following were a given to me or implicit in what I did:
 * Thinking about security concerns 
 * Thinking where to place core business logic - and deciding that the core of the app would be server-side 
 * I resisted the temptation to invent validation logic at all layers where there was significant uncertainty (e.g. the 
-formatting of a valid loyalty scheme card number)
+formatting of a valid company card number)
 
 The following were open questions:
 
@@ -87,7 +95,7 @@ I had these thoughts and questions in the back of my mind to start with:
 * A stateless back-end as seems to be the standard nowadays with OAuth 2 / OpenID Connect
 * Park the details on how authentication and authorization will work to begin with but not at the points at which it 
 should happen (e.g. add TODOs in code if need be)
-* Do not expose or proxy the loyalty scheme back-end APIs to the SPA layer
+* Do not expose or proxy the company back-end APIs to the SPA layer
 * The need to build an *adaptable* adapter (dataprovider layer) used by the core layer is apparent.
 * How to prevent *run-away* gambling, that is a coding error in the front-end (SPA) causing unwanted gambling events
 in the back-end.
@@ -181,7 +189,7 @@ integration testing using an actual working API.
 The marketing web site would in essence produce a *plugin* specification (an interface) that would need to be 
 implemented by a plugin (in effect an adapter).
 
-There is the risk that the cited interface would need to be changed somewhat once the actual working API (loyalty scheme 
+There is the risk that the cited interface would need to be changed somewhat once the actual working API (company 
 backend API) becomes available for inspection and use.
 
 Note excellent documentation could and should be supplied without an actual working API. Even better an OpenAPI
@@ -190,7 +198,7 @@ a documented SDK could be supplied (as AWS and many other web service providers 
 
 *NOTE* knowing some aspects upfront could lead to significant time savings. For example, if I know OpenID Connect could
 be used by the SPA because Single Sing On is already in use by the company, and I know that the JWT tokens can be 
-relayed to the back-end loyalty scheme API for debit and credit authorization purposes then this is information that 
+relayed to the back-end company scheme API for debit and credit authorization purposes then this is information that 
 could and should be supplied (without access to an actual working API).
 
 ## If this needed to be turned into a stand-alone, Production ready artefact, how would you recommend it be deployed and managed?
